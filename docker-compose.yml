@@ -1,0 +1,14 @@
+version: '3'
+services:
+  ros:
+    build:
+      context: .
+    container_name: ros
+    environment:
+      - IP_OF_REMOTE_PC=${IP_OF_REMOTE_PC}
+    # stdin_open: true
+    # tty: true
+    volumes:
+      - ros_volume:/root/
+volumes:
+  ros_volume:
