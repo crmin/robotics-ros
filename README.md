@@ -5,7 +5,7 @@
 ```
 source /opt/ros/noetic/setup.bash     source /root/catkin_ws/devel/setup.bash     export ROS_MASTER_URI=http://localhost:11311     export ROS_HOSTNAME=localhost
 ```
-to:
+예를 들어:
 ```
 source /opt/ros/noetic/setup.bash     source /root/catkin_ws/devel/setup.bash     export ROS_MASTER_URI=http://192.168.0.43:11311     export ROS_HOSTNAME=192.168.0.43
 ```
