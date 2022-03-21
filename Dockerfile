@@ -36,7 +36,6 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
 RUN apt update
 RUN apt -y install ros-noetic-desktop-full
 
-# RUN source /opt/ros/noetic/setup.bash
 RUN bash /opt/ros/noetic/setup.bash
 RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc
 # RUN source /root/.bashrc
@@ -68,11 +67,13 @@ RUN apt -y autoremove
 
 RUN mkdir -p /root/catkin_ws/src
 WORKDIR /root/catkin_ws/
-# RUN echo ${PATH}
-RUN export PATH=/opt/ros/noetic/bin:${PATH}
-RUN export PYTHONPATH=/opt/ros/noetic/lib/python3/dist-packages
-# RUN catkin_make
-RUN /opt/ros/noetic/bin/catkin_make
+
+# Update env var using export and source not work, set env var manually using ENV
+ENV PATH /opt/ros/noetic/bin:${PATH}
+ENV PYTHONPATH /opt/ros/noetic/lib/python3/dist-packages
+ENV IP_OF_REMOTE_PC localhost
+
+RUN catkin_make
 
 # 8) Set ROS_MASTER_URI and ROS_HOSTNAME in .bashrc
 RUN echo "source /opt/ros/noetic/setup.bash \
@@ -83,8 +84,10 @@ RUN echo "source /opt/ros/noetic/setup.bash \
 # RUN source /root/.bashrc
 RUN bash /opt/ros/noetic/setup.bash
 RUN bash /root/catkin_ws/devel/setup.bash
-RUN export ROS_MASTER_URI=http://${IP_OF_REMOTE_PC}:11311
-RUN export ROS_HOSTNAME=${IP_OF_REMOTE_PC}
+
+# Update env var using export and source not work, set env var manually using ENV
+ENV ROS_MASTER_URI http://${IP_OF_REMOTE_PC}:11311
+ENV ROS_HOSTNAME ${IP_OF_REMOTE_PC}
 
 WORKDIR /root/catkin_ws/src/
 # # 9) Download turtlebot3 package
@@ -93,19 +96,14 @@ RUN git clone https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
 RUN git clone https://github.com/ROBOTIS-GIT/turtlebot3.git
 WORKDIR /root/catkin_ws/
 
+# Update env var using export and source not work, set env var manually using ENV
+ENV CMAKE_PREFIX_PATH /opt/ros/noetic
+
 RUN catkin_make
-RUN /opt/ros/noetic/bin/catkin_make
 
 # 10) open ~/.bashrc and add the following to the end
 RUN echo "export TURTLEBOT3_MODEL=waffle_pi" >> /root/.bashrc
-# RUN source /root/.bashrc
 
 WORKDIR /root/
 
 ENTRYPOINT tail -f /dev/null
-
-
-# /opt/ros/noetic/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-# /opt/ros/noetic/bin:/usr/local/sbin:/usr/local/bin:/usr/sb
-
-# /opt/ros/noetic/lib/python3/dist-packages
