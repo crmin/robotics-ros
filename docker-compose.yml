@@ -6,9 +6,11 @@ services:
     container_name: ros
     environment:
       - IP_OF_REMOTE_PC=${IP_OF_REMOTE_PC}
+      - DISPLAY
     # stdin_open: true
     # tty: true
     volumes:
       - ros_volume:/root/
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
 volumes:
   ros_volume:
