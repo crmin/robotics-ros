@@ -1,8 +1,7 @@
 version: '3'
 services:
   ros:
-    build:
-      context: .
+    image: blinglnav/robotics-ros:arm
     container_name: ros
     environment:
       - IP_OF_REMOTE_PC=${IP_OF_REMOTE_PC}
